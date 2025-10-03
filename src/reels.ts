@@ -3,22 +3,21 @@ import { Reel } from './reel';
 
 export class ReelsController extends PIXI.Container {
   reels: Reel[] = [];
-  cols = 5; // 5 columns (reels)
-  rows = 3; // 3 visible rows
+  cols = 5;
+  rows = 3;
   stopping = false;
   private _stopQueue: number[] = [];
 
   constructor(app: PIXI.Application, textures: PIXI.Texture[], emitter: PIXI.utils.EventEmitter) {
     super();
 
-    const spacing = 12;
-    const symbolSize = 128; // size per symbol (assumed square)
+    const symbolSize = 124; // size per symbol (assumed square)
 
     for (let i = 0; i < this.cols; i++) {
       // create unique texture sequence per reel
       const seq = ReelsController.generateUniqueSequence(textures.length);
       const reel = new Reel(i, seq, textures, this.rows, symbolSize, emitter);
-      reel.x = i * (symbolSize + spacing);
+      reel.x = i * (symbolSize);
       this.addChild(reel);
       this.reels.push(reel);
     }

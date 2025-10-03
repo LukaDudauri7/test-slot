@@ -8,7 +8,7 @@ export class Reel extends PIXI.Container {
   seq: number[];
   sprites: PIXI.Sprite[] = [];
   baseSpeed = 24;
-  spinSpeed = 24; // დროთა განმავლობაში მცირდება თუ stop ხდება
+  spinSpeed = 24;
   private emitter: PIXI.utils.EventEmitter;
 
   private spinning = false;
@@ -37,22 +37,19 @@ export class Reel extends PIXI.Container {
     PIXI.Ticker.shared.add(this.onTick, this);
   }
 
-  /** სიმბოლოების შექმნა */
   private createSprites() {
-    // უნდა გვქონდეს rows + 2 (ზევით ერთი, ქვემოთ ერთი) რომ gap არ დარჩეს
     const total = this.rows + 2;
     for (let i = 0; i < total; i++) {
       const val = this.nextSequenceValue();
       const sprite = new PIXI.Sprite(this.getTextureFor(val));
       sprite.width = this.symbolSize;
       sprite.height = this.symbolSize;
-      sprite.y = (i - 1) * this.symbolSize; // პირველი იქნება -symbolSize (offscreen ზევით)
+      sprite.y = (i - 1) * this.symbolSize;
       this.addChild(sprite);
       this.sprites.push(sprite);
     }
   }
 
-  /** Clip mask (რომ მხოლოდ rows * symbolSize ჩანდეს) */
   private createMask() {
     const g = new PIXI.Graphics();
     g.beginFill(0xffffff);
@@ -74,7 +71,6 @@ export class Reel extends PIXI.Container {
     return this.textures[idx] ?? PIXI.Texture.EMPTY;
   }
 
-  /** იწყებს სპინს */
   startSpin() {
     this.spinning = true;
     this.stopping = false;
