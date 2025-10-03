@@ -12,24 +12,27 @@ document.getElementById('app')!.appendChild(app.view as HTMLCanvasElement);
 // Event emitter shared
 const emitter = new PIXI.utils.EventEmitter();
 
-// Load atlas (public/atlas.json + public/test_res.png)
+// Load 
 PIXI.Assets.add('symbols-atlas', '/test_res.json');
 PIXI.Assets.load('symbols-atlas').then((atlas) => {
-  // textures are available through atlas.textures
   const textures = atlas as any;
 
-  // build textures array from atlas keys
+  // build textures array for symbols 1..10
   const symbolTextures: PIXI.Texture[] = [];
   for (let i = 1; i <= 10; i++) {
-    // შეცვლილი key atlas.json-სთან შესაბამისობისთვის
     const key = `symbols/symbol_${String(i).padStart(2, '0')}.png`;
     const t = textures.textures?.[key] ?? PIXI.Texture.EMPTY;
     symbolTextures.push(t);
   }
 
   // initialize reels controller
+  
   const controller = new ReelsController(app, symbolTextures, emitter);
-  controller.position.set(100, 100);
+    // controller.position.set(200, 200);
+    controller.pivot.set(controller.width / 2, controller.height / 2);
+    controller.position.set(app.screen.width / 2, app.screen.height / 2);
+
+
   app.stage.addChild(controller);
 
   // wire UI
