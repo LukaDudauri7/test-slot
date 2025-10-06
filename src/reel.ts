@@ -146,7 +146,7 @@ export class Reel extends PIXI.Container {
       }
     }
 
-    // stopping → ნელ-ნელა ჩერდება
+    // stopping
     if (this.stopping) {
       this.spinSpeed *= 0.95;
       if (this.spinSpeed < 2) {

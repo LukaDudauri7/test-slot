@@ -11,8 +11,9 @@ export class ReelsController extends PIXI.Container {
   constructor(app: PIXI.Application, textures: PIXI.Texture[], emitter: PIXI.utils.EventEmitter) {
     super();
 
-    const symbolSize = 124; // size per symbol (assumed square)
-
+    const baseSymbolSize = 124; // size per symbol (assumed square)
+    const isMobile = window.innerWidth < 768;
+    const symbolSize = isMobile ? baseSymbolSize * 0.6 : baseSymbolSize;
     for (let i = 0; i < this.cols; i++) {
       // create unique texture sequence per reel
       const seq = ReelsController.generateUniqueSequence(textures.length);
@@ -24,14 +25,12 @@ export class ReelsController extends PIXI.Container {
   }
 
   static generateUniqueSequence(symbolCount: number) {
-    // shuffle 1..symbolCount
     const arr = Array.from({ length: 1000 }, (_, i) => ((i % symbolCount) + 1));
-    // shuffle in place
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
-    return arr; // very long random cycle
+    return arr;
   }
 
   spin() {
@@ -61,4 +60,6 @@ export class ReelsController extends PIXI.Container {
       r.quickStop();
     });
   }
+
+  
 }
