@@ -2,23 +2,19 @@ import * as PIXI from 'pixi.js';
 import { ReelsController } from './reels';
 
 const app = new PIXI.Application({
-  resizeTo: window,
-  antialias: true,
+    resizeTo: window,
+    antialias: true,
+    width: window.innerWidth,
+    height: window.innerHeight,
+    resolution: window.devicePixelRatio || 1,
+    autoDensity: true,
+    backgroundColor: 0x1099bb,
 });
 
 document.getElementById('app')!.appendChild(app.view as HTMLCanvasElement);
 
 // Event emitter shared
 const emitter = new PIXI.utils.EventEmitter();
-
-// Load 
-PIXI.Assets.add('background', '/bg.jpeg');
-PIXI.Assets.load('background').then((bg) => {
-  const bgSprite = new PIXI.Sprite(bg as PIXI.Texture);
-  bgSprite.width = app.screen.width;
-  bgSprite.height = app.screen.height + 400;
-  app.stage.addChild(bgSprite);
-});
 
 PIXI.Assets.add('symbols-atlas', '/test_res.json');
 PIXI.Assets.load('symbols-atlas').then((atlas) => {
