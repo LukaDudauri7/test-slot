@@ -54,12 +54,8 @@ export class ReelsController extends PIXI.Container {
   }
 
   stopQuick() {
-    // If standard stopping is in progress, do not change already chosen finals
-    // Immediately stop all reels
     this.reels.forEach(r => {
       r.quickStop();
     });
   }
-
-  
 }

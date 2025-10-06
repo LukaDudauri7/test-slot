@@ -22,37 +22,28 @@ PIXI.Assets.load('background').then((bg) => {
 
 PIXI.Assets.add('symbols-atlas', '/test_res.json');
 PIXI.Assets.load('symbols-atlas').then((atlas) => {
-  const textures = atlas as any;
-
-  // build textures array for symbols 1..10
-  const symbolTextures: PIXI.Texture[] = [];
-  for (let i = 1; i <= 10; i++) {
-    const key = `symbols/symbol_${String(i).padStart(2, '0')}.png`;
-    const t = textures.textures?.[key] ?? PIXI.Texture.EMPTY;
-    symbolTextures.push(t);
-  }
-
-  // initialize reels controller
-  
-  const controller = new ReelsController(app, symbolTextures, emitter);
-    // controller.position.set(200, 200);
+    const textures = atlas as any;
+    const symbolTextures: PIXI.Texture[] = [];
+    for (let i = 1; i <= 10; i++) {
+        const key = `symbols/symbol_${String(i).padStart(2, '0')}.png`;
+        const t = textures.textures?.[key] ?? PIXI.Texture.EMPTY;
+        symbolTextures.push(t);
+    }
+    
+    const controller = new ReelsController(app, symbolTextures, emitter);
     controller.pivot.set(controller.width / 2, controller.height / 2);
     controller.position.set(app.screen.width / 2, app.screen.height / 2);
 
+    app.stage.addChild(controller);
+    const spinBtn = document.getElementById('spin') as HTMLButtonElement;
+    const stopBtn = document.getElementById('stop') as HTMLButtonElement;
+    const breakBtn = document.getElementById('break') as HTMLButtonElement;
 
-  app.stage.addChild(controller);
+    spinBtn.onclick = () => controller.spin();
+    stopBtn.onclick = () => controller.stopStandard();
+    breakBtn.onclick = () => controller.stopQuick();
 
-  // wire UI
-  const spinBtn = document.getElementById('spin') as HTMLButtonElement;
-  const stopBtn = document.getElementById('stop') as HTMLButtonElement;
-  const breakBtn = document.getElementById('break') as HTMLButtonElement;
-
-  spinBtn.onclick = () => controller.spin();
-  stopBtn.onclick = () => controller.stopStandard();
-  breakBtn.onclick = () => controller.stopQuick();
-
-  // log stop events
-  emitter.on('stop', (idx: number) => {
-    console.log('Reel stopped:', idx);
-  });
+    emitter.on('stop', (idx: number) => {
+        console.log('Reel stopped:', idx);
+    });
 });
