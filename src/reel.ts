@@ -59,7 +59,6 @@ export class Reel extends PIXI.Container {
     this.mask = g;
   }
 
-  /** Sequence → იღებს მომდევნო მნიშვნელობას */
   private nextSequenceValue() {
     const v = this.seq.shift()!;
     this.seq.push(v);
@@ -79,7 +78,6 @@ export class Reel extends PIXI.Container {
     this.filters = [new PIXI.filters.BlurFilter(2)];
   }
 
-  /** ირჩევს საბოლოო სიმბოლოებს */
   prepareFinalSymbols() {
     const finals: number[] = [];
     for (let r = 0; r < this.rows; r++) {
@@ -88,25 +86,26 @@ export class Reel extends PIXI.Container {
     this.finalSymbols = finals;
   }
 
-  /** იწყებს ნელ-ნელა გაჩერებას */
   startStop() {
     if (!this.spinning) return;
     this.stopping = true;
   }
 
-  /** უცებ გაჩერება */
   quickStop() {
     if (!this.finalSymbols) this.prepareFinalSymbols();
     this.snapToFinal();
   }
 
-  /** აჩერებს და ალაგებს სიმბოლოებს grid-ზე */
   private snapToFinal() {
     this.filters = [];
-
+    for (const s of this.sprites) {
+        s.y = Math.round(s.y / this.symbolSize) * this.symbolSize;
+    }
+    for (const s of this.sprites) {
+        s.y = Math.round(s.y / this.symbolSize) * this.symbolSize;
+    }
     if (!this.finalSymbols) this.prepareFinalSymbols();
 
-    // პირველი: დააყენე rows რაოდენობის სიმბოლო (ხილული რიგები)
     for (let r = 0; r < this.rows; r++) {
       const sprite = this.sprites[r];
       const val = this.finalSymbols![r];
@@ -114,8 +113,7 @@ export class Reel extends PIXI.Container {
       sprite.y = r * this.symbolSize;
     }
 
-    // მეორე: ზევით ერთი და ქვემოთ ერთი რომ თანმიმდევრული იყოს
-    this.sprites[0].y = -this.symbolSize; // ზედა offscreen
+    this.sprites[0].y = -this.symbolSize;
     for (let i = 1; i < this.sprites.length; i++) {
       this.sprites[i].y = this.sprites[i - 1].y + this.symbolSize;
     }
@@ -127,20 +125,19 @@ export class Reel extends PIXI.Container {
     this.emitter.emit('stop', this.index);
   }
 
-  /** ყოველ tick-ზე განახლება */
   private onTick(delta: number) {
     if (!this.spinning) return;
 
     const bottom = this.rows * this.symbolSize;
     const totalHeight = this.sprites.length * this.symbolSize;
 
-    // გადაადგილება
+    // movement
     const speed = this.spinSpeed * delta;
     for (const s of this.sprites) {
       s.y += speed;
     }
 
-    // wrapping: ვინც გავიდა ქვემოთ, ზევით მოვწიოთ
+    // wrapping
     for (const s of this.sprites) {
       if (s.y >= bottom + this.symbolSize) {
         s.y -= totalHeight;
