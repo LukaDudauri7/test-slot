@@ -11,7 +11,7 @@ export class ReelsController extends PIXI.Container {
   constructor(app: PIXI.Application, textures: PIXI.Texture[], emitter: PIXI.utils.EventEmitter) {
     super();
 
-    const baseSymbolSize = 124; // size per symbol (assumed square)
+    const baseSymbolSize = 124;
     const isMobile = window.innerWidth < 768;
     const symbolSize = isMobile ? baseSymbolSize * 0.6 : baseSymbolSize;
     for (let i = 0; i < this.cols; i++) {

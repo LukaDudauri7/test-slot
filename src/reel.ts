@@ -131,13 +131,11 @@ export class Reel extends PIXI.Container {
     const bottom = this.rows * this.symbolSize;
     const totalHeight = this.sprites.length * this.symbolSize;
 
-    // movement
     const speed = this.spinSpeed * delta;
     for (const s of this.sprites) {
       s.y += speed;
     }
 
-    // wrapping
     for (const s of this.sprites) {
       if (s.y >= bottom + this.symbolSize) {
         s.y -= totalHeight;
@@ -146,7 +144,6 @@ export class Reel extends PIXI.Container {
       }
     }
 
-    // stopping
     if (this.stopping) {
       this.spinSpeed *= 0.95;
       if (this.spinSpeed < 2) {

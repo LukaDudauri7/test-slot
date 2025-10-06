@@ -12,8 +12,6 @@ const app = new PIXI.Application({
 });
 
 document.getElementById('app')!.appendChild(app.view as HTMLCanvasElement);
-
-// Event emitter shared
 const emitter = new PIXI.utils.EventEmitter();
 
 PIXI.Assets.add('symbols-atlas', '/test_res.json');
